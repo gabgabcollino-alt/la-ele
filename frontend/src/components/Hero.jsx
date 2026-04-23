@@ -1,5 +1,5 @@
 import React from "react";
-import { LOGO_URL } from "../lib/assets";
+import { LOGO_URL, DISCORD_URL } from "../lib/assets";
 import { Lightning } from "./Lightning";
 
 export default function Hero() {
@@ -53,7 +53,7 @@ export default function Hero() {
               Ver catálogo
             </a>
             <a
-              href="https://discord.gg/QdgCXuGJNK"
+              href={DISCORD_URL}
               target="_blank"
               rel="noreferrer"
               data-testid="hero-discord-btn"
