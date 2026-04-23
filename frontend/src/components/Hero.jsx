@@ -40,8 +40,9 @@ export default function Hero() {
             <span className="opacity-80">ITEM NA RUA</span>
           </h1>
           <p className="mt-4 font-body text-sm md:text-base text-white/70 max-w-xl">
-            Loja oficial TBX — Serviços, Brasas, Fardamentos e Itens para sua
-            organizada. Pix na hora, atendimento direto no WhatsApp ou Discord.
+            Loja oficial TBX — Serviços, Torcoins, Fardamentos e Itens para
+            sua organizada. Pix na hora, atendimento direto no WhatsApp ou
+            Discord.
           </p>
           <div className="mt-5 flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
             <a

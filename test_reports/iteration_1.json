@@ -1,0 +1,58 @@
+{
+  "summary": "Full e2e validation of Torciblox: 15/15 backend pytest cases passed and all key frontend flows (home catalog, cart, Pix checkout, support FAB, admin login + CRUD + order status) worked as expected. The brasas→torcoins migration is effective: only 'Torcoins' products exist (10/50/100 Torcoins) and the torcoins category returns exactly 3 items.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/me (no token)", "issue": "Relies on HTTPBearer auto_error=False path; /api/orders without token returns 401 as expected. All auth paths behave correctly."},
+      {"endpoint": "GET /api/products", "issue": "Returns documents directly (no envelope). Works but no pagination — acceptable for 26 items."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Home hero", "issues": ["Grunge/street vibe and Bangers/Permanent Marker headings render correctly; contrast is good (white on dark)."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_torciblox_backend.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py uses deprecated FastAPI @app.on_event('startup'/'shutdown'); consider migrating to lifespan context for future FastAPI versions.",
+    "CORS is set with allow_credentials=True AND allow_origins='*' (from env default). With credentials, browsers reject '*'. Consider setting CORS_ORIGINS to explicit origins (or allow_credentials=False) to be spec-compliant.",
+    "JWT_SECRET has a sensible default in .env but code falls back to 'change-me' if missing — acceptable while .env is present.",
+    "create_product slug generation does not sanitize accents/special chars (only for seed path). Minor.",
+    "Order code uses 6 hex chars (1 in ~16M collision) — sufficient for current scale; enforced uniqueness via index."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_torciblox_backend.py"
+  ],
+  "success_rate": {"backend": "100% (15/15)", "frontend": "100% of tested flows"},
+  "test_credentials": "admin@torciblox.gg / torciblox2025 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "No permanent seed data left. Created a TEST_QA_Produto during admin UI test and cleaned it up via API. Created 3 TEST orders (QA Test User, TEST_Status, QA Tester) that remain in the DB for inspection; these are harmless test orders.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend pytest file is at /app/backend/tests/test_torciblox_backend.py — run via `pytest /app/backend/tests/ -v --junitxml=/app/test_reports/pytest/pytest_results.xml`. Admin creds in /app/memory/test_credentials.md. Frontend data-testids used: site-header, header-cart-btn, header-cart-count, hero-catalog-btn, category-section-{cat}, product-card-{id}, product-buy-{id}, cart-drawer, cart-subtotal, cart-checkout-btn, cart-inc-{id}, cart-dec-{id}, cart-remove-{id}, cart-backdrop, checkout-modal, checkout-name-input, checkout-contact-input, checkout-submit-btn, checkout-order-code, checkout-pix-key, fab-support-btn, support-panel, admin-login-form/email/password/submit, admin-tab-products/orders, admin-new-product-btn, admin-form-name/price/category/submit, admin-order-status-{id}. Note: admin Products tab does not expose a testid for the delete action — not critical for tests but could be added as admin-product-delete-{id}.",
+  "validated_flows": [
+    "GET /api/ ok=true",
+    "GET /api/config returns non-empty whatsapp=5511949850080 / discord / pix_key / pix_key_type / pix_receiver",
+    "GET /api/products returns 26 active products across 8 categories (servicos, torcoins, sistema, fardamentos, itens_mensais, itens_30, itens_wipe, acesso); no brasas",
+    "GET /api/products?category=torcoins returns 3 products named 10/50/100 Torcoins",
+    "POST /api/auth/login returns token + admin role",
+    "GET /api/auth/me (Bearer) returns admin; without token -> 401",
+    "POST/PUT/DELETE /api/products gated by admin token (401 without token)",
+    "POST /api/orders returns code TBX-XXXXXX with correct subtotal_cents",
+    "POST /api/orders rejects invalid product_id with 400 and empty items with 400",
+    "GET /api/orders requires auth; PATCH status accepts paid|pending|cancelled|delivered; invalid -> 400; unknown id -> 404",
+    "Home renders: header, hero CTAs, 8 category sections, 26 product cards",
+    "Comprar agora adds to cart, drawer opens, count updates, subtotal correct",
+    "Drawer +/- adjusts qty; subtotal updates live (R$40 -> R$80 -> R$40)",
+    "Checkout modal submits and returns TBX-XXXXXX code plus pix_key=contato@torciblox.gg and WhatsApp link to wa.me/5511949850080",
+    "FAB suporte opens panel with WhatsApp and Discord (discord.gg/QdgCXuGJNK) links",
+    "/admin without token redirects to /admin/login; admin login succeeds and lands on /admin",
+    "Admin Produtos: create new product via UI (category Torcoins) succeeds and shows in list",
+    "Admin Pedidos: orders visible, status select changes 'pending' -> 'paid' with confirmation toast"
+  ]
+}

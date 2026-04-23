@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 
 const CATEGORY_ORDER = [
   { key: "servicos", label: "SERVIÇOS" },
-  { key: "brasas", label: "BRASAS" },
+  { key: "torcoins", label: "TORCOINS" },
   { key: "fardamentos", label: "FARDAMENTOS" },
   { key: "itens_mensais", label: "ITENS MENSAIS" },
   { key: "itens_30", label: "ITENS 30 DIAS" },

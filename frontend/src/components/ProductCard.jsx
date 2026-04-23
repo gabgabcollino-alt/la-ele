@@ -1,55 +1,97 @@
 import React from "react";
-import { ShoppingBasket } from "lucide-react";
+import {
+  ShoppingBasket,
+  Coins,
+  Shirt,
+  Server,
+  Shield,
+  Hammer,
+  Swords,
+  Skull,
+  Ticket,
+} from "lucide-react";
 import { formatBRL } from "../lib/api";
 import { useCart } from "../context/CartContext";
 import { Lightning } from "./Lightning";
 import { LOGO_URL } from "../lib/assets";
 
-const CATEGORY_BG = {
-  servicos:
-    "linear-gradient(135deg, rgba(30,30,30,0.9), rgba(10,10,10,0.95))",
-  brasas:
-    "linear-gradient(135deg, rgba(40,15,5,0.9), rgba(10,10,10,0.95))",
-  sistema:
-    "linear-gradient(135deg, rgba(15,20,40,0.9), rgba(10,10,10,0.95))",
-  fardamentos:
-    "linear-gradient(135deg, rgba(35,35,35,0.9), rgba(10,10,10,0.95))",
-  itens_mensais:
-    "linear-gradient(135deg, rgba(25,25,25,0.9), rgba(10,10,10,0.95))",
-  itens_30:
-    "linear-gradient(135deg, rgba(25,25,25,0.9), rgba(10,10,10,0.95))",
-  itens_wipe:
-    "linear-gradient(135deg, rgba(50,10,10,0.9), rgba(10,10,10,0.95))",
-  acesso:
-    "linear-gradient(135deg, rgba(20,15,40,0.9), rgba(10,10,10,0.95))",
+// Category visual config: background image + overlay color + icon
+const CATEGORY_VISUALS = {
+  servicos: {
+    icon: Shield,
+    tint: "linear-gradient(135deg, rgba(30,30,30,0.55), rgba(10,10,10,0.92))",
+    img: "https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=900&auto=format&fit=crop",
+  },
+  torcoins: {
+    icon: Coins,
+    tint: "linear-gradient(135deg, rgba(60,35,5,0.45), rgba(10,10,10,0.92))",
+    img: "https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=900&auto=format&fit=crop",
+  },
+  sistema: {
+    icon: Server,
+    tint: "linear-gradient(135deg, rgba(20,25,55,0.55), rgba(10,10,10,0.92))",
+    img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=900&auto=format&fit=crop",
+  },
+  fardamentos: {
+    icon: Shirt,
+    tint: "linear-gradient(135deg, rgba(35,35,35,0.55), rgba(10,10,10,0.92))",
+    img: "https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=900&auto=format&fit=crop",
+  },
+  itens_mensais: {
+    icon: Hammer,
+    tint: "linear-gradient(135deg, rgba(30,25,20,0.55), rgba(10,10,10,0.92))",
+    img: "https://images.unsplash.com/photo-1504222490345-c075b6008014?q=80&w=900&auto=format&fit=crop",
+  },
+  itens_30: {
+    icon: Swords,
+    tint: "linear-gradient(135deg, rgba(30,25,25,0.55), rgba(10,10,10,0.92))",
+    img: "https://images.unsplash.com/photo-1553531384-cc64ac80f931?q=80&w=900&auto=format&fit=crop",
+  },
+  itens_wipe: {
+    icon: Skull,
+    tint: "linear-gradient(135deg, rgba(70,10,10,0.55), rgba(10,10,10,0.92))",
+    img: "https://images.unsplash.com/photo-1517976547714-720226b864c1?q=80&w=900&auto=format&fit=crop",
+  },
+  acesso: {
+    icon: Ticket,
+    tint: "linear-gradient(135deg, rgba(35,20,55,0.55), rgba(10,10,10,0.92))",
+    img: "https://images.unsplash.com/photo-1572204097183-e1ab140342ed?q=80&w=900&auto=format&fit=crop",
+  },
 };
 
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
-  const bg = CATEGORY_BG[product.category] || CATEGORY_BG.servicos;
+  const vis = CATEGORY_VISUALS[product.category] || CATEGORY_VISUALS.servicos;
+  const Icon = vis.icon;
   return (
     <article
       data-testid={`product-card-${product.id}`}
       className="tbx-card relative rounded-xl border border-white/10 hover:border-white/30 transition-all duration-300 overflow-hidden group"
     >
       {/* Image panel */}
-      <div
-        className="relative h-40 md:h-48 overflow-hidden"
-        style={{ background: bg }}
-      >
+      <div className="relative h-44 md:h-52 overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url('${vis.img}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "grayscale(40%) contrast(1.05)",
+          }}
+        />
+        <div className="absolute inset-0" style={{ background: vis.tint }} />
         <div
           className="absolute inset-0 opacity-[0.18] mix-blend-screen"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1605602922835-a08452b4179d?q=80&w=800&auto=format&fit=crop')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='g'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E\")",
           }}
         />
+
         <img
           src={LOGO_URL}
           alt=""
-          className="absolute top-2 left-2 w-8 h-8 md:w-9 md:h-9 rounded-md object-cover ring-1 ring-white/20 opacity-90"
+          className="absolute top-2 left-2 w-8 h-8 md:w-9 md:h-9 rounded-md object-cover ring-1 ring-white/20 opacity-95"
         />
         <Lightning
           side="right"
@@ -59,12 +101,25 @@ export default function ProductCard({ product }) {
           side="left"
           className="absolute bottom-1 left-1 w-5 h-8 md:w-6 md:h-9 opacity-50"
         />
-        <div className="absolute inset-0 flex items-end">
+
+        {/* Big category icon centered */}
+        <div className="absolute inset-0 grid place-items-center pointer-events-none">
+          <div className="relative">
+            <div className="absolute inset-0 blur-2xl opacity-40 bg-white/30 rounded-full" />
+            <Icon
+              className="relative w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-[0_3px_0_rgba(0,0,0,0.9)]"
+              strokeWidth={1.5}
+            />
+          </div>
+        </div>
+
+        {/* Title overlay */}
+        <div className="absolute inset-x-0 bottom-0 flex items-end">
           <h3
-            className="w-full text-center pb-3 px-2 font-marker text-xl md:text-2xl leading-tight text-white drop-shadow-[0_2px_0_rgba(0,0,0,0.9)]"
+            className="w-full text-center pb-3 px-2 font-marker text-xl md:text-2xl leading-tight text-white"
             style={{
               textShadow:
-                "0 2px 0 rgba(0,0,0,0.95), 0 0 12px rgba(255,255,255,0.2)",
+                "0 2px 0 rgba(0,0,0,0.95), 0 0 12px rgba(255,255,255,0.22)",
             }}
           >
             {product.name.toUpperCase()}

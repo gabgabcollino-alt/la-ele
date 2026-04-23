@@ -8,7 +8,7 @@ import { toast, Toaster } from "sonner";
 
 const CATEGORIES = [
   { key: "servicos", label: "Serviços" },
-  { key: "brasas", label: "Brasas" },
+  { key: "torcoins", label: "Torcoins" },
   { key: "sistema", label: "Sistema" },
   { key: "fardamentos", label: "Fardamentos" },
   { key: "itens_mensais", label: "Itens Mensais" },

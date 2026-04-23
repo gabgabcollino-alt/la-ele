@@ -317,10 +317,10 @@ SEED_PRODUCTS = [
     ("servicos", "Serviços", "Criar qualquer polícia", 3500, 30),
     ("servicos", "Serviços", "Criar servidor Discord", 700, 40),
     ("servicos", "Serviços", "1 objeto organizada/polícia", 600, 50),
-    # BRASAS
-    ("brasas", "Brasas", "10 Brasas", 1000, 10),
-    ("brasas", "Brasas", "50 Brasas", 4500, 20),
-    ("brasas", "Brasas", "100 Brasas", 8000, 30),
+    # TORCOINS (antiga Brasas)
+    ("torcoins", "Torcoins", "10 Torcoins", 1000, 10),
+    ("torcoins", "Torcoins", "50 Torcoins", 4500, 20),
+    ("torcoins", "Torcoins", "100 Torcoins", 8000, 30),
     # SISTEMA
     ("sistema", "Sistema", "Fast Allowlist", 2000, 10),
     ("sistema", "Sistema", "Remover Blacklist", 5000, 20),
@@ -380,6 +380,18 @@ async def on_startup():
                 {"$set": {"password_hash": hash_password(admin_password)}},
             )
             logger.info("Admin password refreshed from env")
+
+    # Migration: rename Brasas -> Torcoins
+    await db.products.update_many(
+        {"category": "brasas"},
+        {"$set": {"category": "torcoins", "category_label": "Torcoins"}},
+    )
+    for old, new in [
+        ("10 Brasas", "10 Torcoins"),
+        ("50 Brasas", "50 Torcoins"),
+        ("100 Brasas", "100 Torcoins"),
+    ]:
+        await db.products.update_many({"name": old}, {"$set": {"name": new}})
 
     # Seed products (only if empty)
     count = await db.products.count_documents({})
