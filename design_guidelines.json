@@ -1,0 +1,113 @@
+{
+  "theme": "dark",
+  "archetype": "2 (Performance Pro / Streetwear Adaptation)",
+  "vibe": "Organized, serious, real supporter group. Heavy/street style, not generic or childish.",
+  "design_principles": [
+    "Use deep blacks and dark grays as the structural base with subtle textures (grunge, concrete, stadium).",
+    "High contrast with pure white for prices and main text.",
+    "No green colors at all. Use purple ONLY as an accent (e.g., Discord).",
+    "Aggressive, graffiti-style headings paired with clean, geometric sans-serif body text.",
+    "Incorporate white lightning bolts (SVG) at the corners of cards/sections.",
+    "Maintain symmetry in product grids (2 columns on mobile) with equal-height cards."
+  ],
+  "colors": {
+    "background": {
+      "base": "#0A0A0A",
+      "surface": "#141414",
+      "surface_elevated": "#1F1F1F",
+      "overlay": "rgba(0, 0, 0, 0.8)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "muted": "#71717A"
+    },
+    "brand": {
+      "primary": "#FFFFFF",
+      "accent_purple": "#5865F2"
+    },
+    "border": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "highlight": "rgba(255, 255, 255, 0.2)"
+    }
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Bangers, Rubik Mono One, Permanent Marker, system-ui",
+      "style": "uppercase, aggressive, street style",
+      "sizes": {
+        "h1": "text-5xl md:text-6xl+",
+        "h2": "text-4xl md:text-5xl",
+        "h3": "text-2xl md:text-3xl"
+      },
+      "tracking": "tracking-wide"
+    },
+    "body": {
+      "font_family": "Montserrat, Poppins, sans-serif",
+      "style": "clean, modern, legible",
+      "sizes": {
+        "default": "text-base",
+        "small": "text-sm",
+        "price": "text-2xl md:text-3xl font-bold text-white"
+      }
+    }
+  },
+  "layout_and_spacing": {
+    "general": "Generous spacing between sections (py-16 to py-24), dense content inside grids (gap-4).",
+    "product_grid": "grid-cols-2 on mobile, grid-cols-2 md:grid-cols-4 lg:grid-cols-5 on desktop. gap-3 md:gap-6.",
+    "header": "Fixed, backdrop-blur-xl bg-black/80, z-50. Must include Logo, 'Torciblox' title, and icons (Search, Support, Cart)."
+  },
+  "components": {
+    "product_card": {
+      "surface": "bg-[#141414]",
+      "border": "border border-white/10 rounded-xl overflow-hidden relative",
+      "hover": "hover:border-white/30 transition-colors duration-300 hover:-translate-y-1",
+      "visuals": "Must include lightning bolt SVG decorations in corners.",
+      "content": "Image (graffiti/street style), Title, Large White Price, Pix Badge (small pill), 'Comprar agora' Button."
+    },
+    "button": {
+      "primary": "bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white border border-white/20 rounded-lg py-2 px-4 font-body font-bold uppercase transition-all shadow-[0_0_10px_rgba(255,255,255,0.05)] hover:shadow-[0_0_15px_rgba(255,255,255,0.15)]",
+      "discord": "bg-[#5865F2]/10 hover:bg-[#5865F2]/20 text-[#5865F2] border border-[#5865F2]/30 rounded-lg px-4 py-2"
+    },
+    "cart_drawer": {
+      "style": "Dark background bg-[#0A0A0A], border-l border-white/10.",
+      "elements": "List of items, quantities, subtotal, large 'Finalizar via Pix' button."
+    },
+    "badges": {
+      "pix": "bg-black text-white border border-white/30 text-xs px-2 py-1 rounded-full uppercase tracking-wider"
+    }
+  },
+  "visual_enhancers": {
+    "background_texture": "Use a global dark CSS radial gradient (vignette) combined with the provided grunge image URL as a low-opacity fixed background.",
+    "lightning_corners": "Use simple white SVG strokes forming lightning or sharp angles at card corners to mimic the reference.",
+    "paint_splatter": "Subtle white/gray particle or splatter overlays in CSS or SVG for empty spaces."
+  },
+  "media": {
+    "logos": {
+      "brand": "https://customer-assets.emergentagent.com/job_d79785f2-f4c6-4451-8f42-1b206050b508/artifacts/85816zlu_b1f044e6bb4a4d5938fa770b7e08ed3a.png"
+    },
+    "references": {
+      "card_style": "https://customer-assets.emergentagent.com/job_d79785f2-f4c6-4451-8f42-1b206050b508/artifacts/htwtwzd4_Design%20sem%20nome%202.png"
+    },
+    "textures": {
+      "grunge_bg": "https://images.unsplash.com/photo-1605602922835-a08452b4179d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODF8MHwxfHNlYXJjaHwxfHxkYXJrJTIwZ3J1bmdlJTIwY29uY3JldGUlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3Njk3OTczNXww&ixlib=rb-4.1.0&q=85",
+      "lightning": "https://images.unsplash.com/photo-1563619276787-2740329985f5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHxsaWdodG5pbmclMjBzdHJpa2UlMjBkYXJrfGVufDB8fHx8MTc3Njk3OTczNXww&ixlib=rb-4.1.0&q=85",
+      "brasas": "https://images.unsplash.com/photo-1768429670472-c37090eb7e37?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHxnb2xkJTIwY29pbiUyMGZpcmV8ZW58MHx8fHwxNzc2OTc5NzM1fDA&ixlib=rb-4.1.0&q=85"
+    }
+  },
+  "contact": {
+    "whatsapp": "11949850080",
+    "discord": "https://discord.gg/QdgCXuGJNK"
+  },
+  "instructions_to_main_agent": [
+    "Install and configure Google Fonts in the HTML/CSS for 'Bangers' (or 'Permanent Marker') for headings and 'Poppins' for body.",
+    "Set the global background to #0A0A0A and overlay the 'grunge_bg' image with opacity-10 and mix-blend-screen/overlay.",
+    "Implement the 2-column mobile grid for products strictly.",
+    "Create custom SVG lightning details for the corners of the product cards.",
+    "DO NOT USE ANY GREEN. ONLY Black, Dark Gray, White, and Purple (for Discord elements).",
+    "Add 'data-testid' to all interactive elements (buttons, cart, inputs).",
+    "Ensure the hero section features the TBX logo and a strong slogan in the graffiti font.",
+    "Implement floating action buttons or footer links for the WhatsApp and Discord URLs.",
+    "For product images without specific assets, use dark placeholders with subtle lightning or grunge patterns."
+  ]
+}
