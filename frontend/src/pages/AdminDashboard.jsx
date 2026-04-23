@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api, formatBRL } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import { LOGO_URL } from "../lib/assets";
-import { Plus, Pencil, Trash2, LogOut, X, RefreshCw } from "lucide-react";
+import { Plus, Pencil, Trash2, LogOut, X, RefreshCw, Sparkles, ImageIcon } from "lucide-react";
 import { toast, Toaster } from "sonner";
 
 const CATEGORIES = [
@@ -87,6 +87,26 @@ export default function AdminDashboard() {
     loadOrders();
   };
 
+  const generateAllImages = async () => {
+    try {
+      await api.post("/admin/generate-images");
+      toast.success("Geração iniciada. Atualize em alguns minutos.");
+    } catch {
+      toast.error("Falha ao iniciar geração");
+    }
+  };
+
+  const regenerateOne = async (id) => {
+    toast.message("Gerando imagem...");
+    try {
+      await api.post(`/admin/products/${id}/regenerate-image`);
+      toast.success("Imagem atualizada");
+      loadProducts();
+    } catch {
+      toast.error("Falha ao gerar imagem");
+    }
+  };
+
   if (loading || !user) {
     return (
       <div className="min-h-screen grid place-items-center text-white/60 font-body">
@@ -143,17 +163,26 @@ export default function AdminDashboard() {
       <main className="max-w-6xl mx-auto px-4 py-6">
         {tab === "products" && (
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
               <h2 className="font-bangers text-3xl tracking-wider text-white">
                 PRODUTOS
               </h2>
-              <button
-                onClick={() => { setEditing(null); setShowForm(true); }}
-                data-testid="admin-new-product-btn"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-black font-body font-bold uppercase text-xs tracking-widest tbx-btn-glow"
-              >
-                <Plus className="w-4 h-4" /> Novo produto
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={generateAllImages}
+                  data-testid="admin-gen-all-btn"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 text-white font-body font-bold uppercase text-xs tracking-widest tbx-btn-glow"
+                >
+                  <Sparkles className="w-4 h-4" /> Gerar imagens faltantes
+                </button>
+                <button
+                  onClick={() => { setEditing(null); setShowForm(true); }}
+                  data-testid="admin-new-product-btn"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-black font-body font-bold uppercase text-xs tracking-widest tbx-btn-glow"
+                >
+                  <Plus className="w-4 h-4" /> Novo produto
+                </button>
+              </div>
             </div>
             <div className="rounded-xl border border-white/10 overflow-hidden">
               <table className="w-full text-sm font-body">
@@ -179,6 +208,14 @@ export default function AdminDashboard() {
                       </td>
                       <td className="p-3 text-right">
                         <div className="inline-flex gap-2">
+                          <button
+                            onClick={() => regenerateOne(p.id)}
+                            data-testid={`admin-regen-img-${p.id}`}
+                            title="Gerar imagem"
+                            className="w-8 h-8 grid place-items-center rounded-md border border-white/15 bg-white/5 hover:bg-white/10"
+                          >
+                            <ImageIcon className="w-3.5 h-3.5" />
+                          </button>
                           <button
                             onClick={() => { setEditing({ ...p, price_reais: (p.price_cents / 100).toFixed(2) }); setShowForm(true); }}
                             data-testid={`admin-edit-${p.id}`}

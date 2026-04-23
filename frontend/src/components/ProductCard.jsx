@@ -63,6 +63,10 @@ export default function ProductCard({ product }) {
   const { addItem } = useCart();
   const vis = CATEGORY_VISUALS[product.category] || CATEGORY_VISUALS.servicos;
   const Icon = vis.icon;
+  const hasImage = Boolean(product.image_url);
+  const imageSrc = hasImage
+    ? `${process.env.REACT_APP_BACKEND_URL}${product.image_url}`
+    : vis.img;
   return (
     <article
       data-testid={`product-card-${product.id}`}
@@ -73,15 +77,20 @@ export default function ProductCard({ product }) {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url('${vis.img}')`,
+            backgroundImage: `url('${imageSrc}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            filter: "grayscale(40%) contrast(1.05)",
+            filter: hasImage ? "contrast(1.05)" : "grayscale(40%) contrast(1.05)",
           }}
         />
-        <div className="absolute inset-0" style={{ background: vis.tint }} />
+        {!hasImage && (
+          <div className="absolute inset-0" style={{ background: vis.tint }} />
+        )}
+        {hasImage && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30" />
+        )}
         <div
-          className="absolute inset-0 opacity-[0.18] mix-blend-screen"
+          className="absolute inset-0 opacity-[0.18] mix-blend-screen pointer-events-none"
           style={{
             backgroundImage:
               "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='g'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E\")",
@@ -102,16 +111,18 @@ export default function ProductCard({ product }) {
           className="absolute bottom-1 left-1 w-5 h-8 md:w-6 md:h-9 opacity-50"
         />
 
-        {/* Big category icon centered */}
-        <div className="absolute inset-0 grid place-items-center pointer-events-none">
-          <div className="relative">
-            <div className="absolute inset-0 blur-2xl opacity-40 bg-white/30 rounded-full" />
-            <Icon
-              className="relative w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-[0_3px_0_rgba(0,0,0,0.9)]"
-              strokeWidth={1.5}
-            />
+        {/* Big category icon fallback only when no image */}
+        {!hasImage && (
+          <div className="absolute inset-0 grid place-items-center pointer-events-none">
+            <div className="relative">
+              <div className="absolute inset-0 blur-2xl opacity-40 bg-white/30 rounded-full" />
+              <Icon
+                className="relative w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-[0_3px_0_rgba(0,0,0,0.9)]"
+                strokeWidth={1.5}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Title overlay */}
         <div className="absolute inset-x-0 bottom-0 flex items-end">

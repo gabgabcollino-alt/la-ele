@@ -7,16 +7,24 @@ load_dotenv(ROOT_DIR / '.env')
 import os
 import uuid
 import logging
+import asyncio
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional
 
 import bcrypt
 import jwt
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, BackgroundTasks
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr
+
+from image_gen import (
+    STATIC_DIR,
+    generate_missing_images,
+    generate_product_image,
+)
 
 
 # Mongo
@@ -298,7 +306,29 @@ async def update_order_status(order_id: str, payload: dict, _=Depends(get_curren
     return {"ok": True}
 
 
+# --- Image generation (admin) ---
+@api.post("/admin/generate-images")
+async def admin_generate_images(background: BackgroundTasks, _=Depends(get_current_admin)):
+    background.add_task(generate_missing_images, db)
+    return {"ok": True, "message": "Geração iniciada em segundo plano"}
+
+
+@api.post("/admin/products/{product_id}/regenerate-image")
+async def admin_regenerate_image(product_id: str, _=Depends(get_current_admin)):
+    product = await db.products.find_one({"id": product_id}, {"_id": 0})
+    if not product:
+        raise HTTPException(status_code=404, detail="Not found")
+    url = await generate_product_image(product)
+    if not url:
+        raise HTTPException(status_code=500, detail="Falha ao gerar imagem")
+    await db.products.update_one({"id": product_id}, {"$set": {"image_url": url}})
+    return {"ok": True, "image_url": url}
+
+
 app.include_router(api)
+
+# Serve generated product images
+app.mount("/api/static/products", StaticFiles(directory=str(STATIC_DIR)), name="product-images")
 
 app.add_middleware(
     CORSMiddleware,
@@ -413,6 +443,16 @@ async def on_startup():
             })
         await db.products.insert_many(docs)
         logger.info("Seeded %d products", len(docs))
+
+    # Kick off image generation in background for any product missing an image.
+    async def _bg_generate():
+        try:
+            res = await generate_missing_images(db)
+            logger.info("Background image generation finished: %s", res)
+        except Exception as e:
+            logger.exception("Background image generation crashed: %s", e)
+
+    asyncio.create_task(_bg_generate())
 
 
 @app.on_event("shutdown")

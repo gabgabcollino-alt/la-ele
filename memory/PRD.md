@@ -39,3 +39,11 @@ Loja online para torcidas organizadas / comunidade de jogo. Identidade visual pr
 - Integrar gateway Pix real (requer chaves do Mercado Pago/Asaas).
 - Permitir upload de imagem do produto no admin.
 - Webhook Discord para notificar pedidos novos.
+
+## Update (2025-12) — Imagens IA + Chave Pix real
+- Chave Pix atualizada para **31990667635** (telefone) em /app/backend/.env
+- Integração **Gemini Nano Banana** (gemini-3.1-flash-image-preview) via Emergent LLM Key para geração automática de imagens dos 26 produtos
+- Auto-geração dispara em background no startup se houver produtos sem imagem
+- Admin tem botões: "Gerar imagens faltantes" (batch) e ícone por produto para regenerar individualmente
+- Endpoints: POST /api/admin/generate-images (batch background), POST /api/admin/products/{id}/regenerate-image
+- Arquivos servidos em /api/static/products/{id}.png
