@@ -5,11 +5,16 @@
   "engines": {
     "node": "24.x"
   },
-  "resolutions": {
-    "ajv": "^6.12.6"
+  "overrides": {
+    "ajv-keywords": {
+      "ajv": "^8.0.0"
+    },
+    "schema-utils": {
+      "ajv": "^8.0.0"
+    }
   },
   "dependencies": {
-    "ajv": "^6.12.6",
+    "ajv": "^8.0.0",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-accordion": "^1.2.8",
     "@radix-ui/react-alert-dialog": "^1.1.11",
